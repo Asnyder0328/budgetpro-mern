@@ -1,0 +1,18 @@
+# Render Blueprint — one web service serving API + React build.
+# Database: create a free MongoDB Atlas cluster, then set MONGO_URI in the Render dashboard.
+# Deploy: Render → New → Blueprint → connect this repo. Then (once) run `npm run seed` in the Render Shell.
+services:
+  - type: web
+    name: budgetpro
+    env: node
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build && cd ../backend && npm install
+    startCommand: cd backend && node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGO_URI
+        sync: false # paste your MongoDB Atlas connection string
+    healthCheckPath: /api/health
